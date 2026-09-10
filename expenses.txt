@@ -1,0 +1,5 @@
+700,transport,2026-09-05,travel to city
+12000,bills,2026-09-06,electricity bill
+15000,other,2026-09-06,grocery 
+6000,food,2026-09-06,milk expense
+10000,food,2026-09-06,fruits 

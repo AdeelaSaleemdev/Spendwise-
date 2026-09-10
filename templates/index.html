@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>SpendWise</title>
+</head>
+<body>
+     
+    {% include "navbar.html" %}
+    <a href="/ai-insights">Ask AI</a>
+
+    <div class="container">
+        <div class="hero">
+            <h1>SpendWise</h1>
+            <p>Track your expenses, understand your spending.</p>
+        </div>
+
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="label">Total Spent</div>
+                <div class="value">Rs. {{ "%.2f"|format(total_spent) }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="label">Total Expenses</div>
+                <div class="value">{{ total_count }}</div>
+            </div>
+        </div>
+
+        <a href="/add" class="btn-link">+ Add New Expense</a>
+
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Amount</th>
+                <th>Category</th>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+            {% for expense in expenses %}
+            <tr>
+                <td>{{ expense[0] }}</td>
+                <td>Rs. {{ expense[1] }}</td>
+                <td>{{ expense[2] }}</td>
+                <td>{{ expense[3] }}</td>
+                <td>{{ expense[4] }}</td>
+                <td class="action-link">
+                    <a href="/edit/{{ expense[0] }}">Edit</a> |
+                    <a href="/delete/{{ expense[0] }}">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+</body>
+</html>

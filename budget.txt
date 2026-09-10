@@ -1,0 +1,5 @@
+total,30000
+food,10000
+transport,2000
+bills,15000
+other,3000

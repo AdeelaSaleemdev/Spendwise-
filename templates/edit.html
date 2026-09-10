@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Edit Expense</title>
+</head>
+<body>
+    {% include "navbar.html" %}
+
+    <div class="container">
+        <h1>Edit Expense</h1>
+
+        <form method="POST">
+            <label>Amount:</label>
+            <input type="number" name="amount" step="0.01" value="{{ expense[1] }}" required>
+
+            <label>Category:</label>
+            <input type="text" name="category" value="{{ expense[2] }}" required>
+
+            <label>Date:</label>
+            <input type="date" name="date" value="{{ expense[3] }}" required>
+
+            <label>Description:</label>
+            <input type="text" name="description" value="{{ expense[4] }}">
+
+            <button type="submit">Update Expense</button>
+        </form>
+
+        <a href="/">Back to all expenses</a>
+    </div>
+</body>
+</html>

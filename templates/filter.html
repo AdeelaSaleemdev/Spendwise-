@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Search / Filter</title>
+</head>
+<body>
+    {% include "navbar.html" %}
+
+    <div class="container">
+        <h1>Search / Filter Expenses</h1>
+
+        <form method="GET">
+            <label>Category:</label>
+            <input type="text" name="category" value="{{ category }}">
+
+            <label>Month (YYYY-MM):</label>
+            <input type="text" name="month" value="{{ month }}">
+
+            <label>Minimum Amount:</label>
+            <input type="number" name="min_amount" step="0.01" value="{{ min_amount }}">
+
+            <button type="submit">Search</button>
+        </form>
+
+        <h2>Results</h2>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Amount</th>
+                <th>Category</th>
+                <th>Date</th>
+                <th>Description</th>
+            </tr>
+            {% for expense in results %}
+            <tr>
+                <td>{{ expense[0] }}</td>
+                <td>Rs. {{ expense[1] }}</td>
+                <td>{{ expense[2] }}</td>
+                <td>{{ expense[3] }}</td>
+                <td>{{ expense[4] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <a href="/">Back to all expenses</a>
+    </div>
+</body>
+</html>

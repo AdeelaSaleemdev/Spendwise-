@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Dashboard</title>
+    <style>
+        .bar-container {
+            background-color: #eee;
+            width: 300px;
+            height: 20px;
+            margin-bottom: 10px;
+        }
+        .bar-fill {
+            background-color: steelblue;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    {% include "navbar.html" %}
+
+    <div class="container">
+        <h1>Dashboard</h1>
+
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="label">Total Spent</div>
+                <div class="value">Rs. {{ "%.2f"|format(total_spent) }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="label">Highest Category</div>
+                <div class="value">{{ highest_category }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="label">Avg Daily Spend</div>
+                <div class="value">Rs. {{ "%.2f"|format(average_daily) }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="label">Remaining Budget</div>
+                <div class="value">Rs. {{ "%.2f"|format(remaining) }}</div>
+            </div>
+        </div>
+
+        <h2>Spending by Category</h2>
+        {% for category, amount, width_percent in bar_data %}
+        <p>{{ category }} — Rs. {{ "%.2f"|format(amount) }}</p>
+        <div class="bar-container">
+        <div class="bar-fill" style="width: {{ width_percent }}%;"></div>
+        </div>
+        {% endfor %}
+
+        <h2>Insights</h2>
+        <ul>
+            <li>'{{ highest_category }}' is your highest spending category.</li>
+            {% if budget_percent >= 100 %}
+            <li>🚨 You have exceeded your monthly budget! ({{ "%.1f"|format(budget_percent) }}% used)</li>
+            {% elif budget_percent >= 80 %}
+            <li>⚠️ You have used {{ "%.1f"|format(budget_percent) }}% of your monthly budget — getting close.</li>
+            {% else %}
+            <li>You have used {{ "%.1f"|format(budget_percent) }}% of your monthly budget so far.</li>
+            {% endif %}
+        </ul>
+
+        <a href="/">Back to all expenses</a>
+        </div>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Insights</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    {% include "navbar.html" %}
+
+    <div class="container">
+        <h1>Ask AI About Your Spending</h1>
+
+        <form method="POST">
+            <label>Your Question:</label>
+            <input type="text" name="question" placeholder="e.g. Where am I spending the most?" required>
+
+            <button type="submit">Ask</button>
+        </form>
+
+        {% if answer %}
+        <div class="stat-card" style="margin-top: 20px; max-width: 600px;">
+            <div class="label">AI Answer</div>
+            <p style="margin-top: 10px; line-height: 1.6;">{{ answer }}</p>
+        </div>
+        {% endif %}
+
+        <br>
+        <a href="/">Back to all expenses</a>
+    </div>
+</body>
+</html>

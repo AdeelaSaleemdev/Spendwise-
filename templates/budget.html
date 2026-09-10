@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Budget</title>
+</head>
+<body>
+    {% include "navbar.html" %}
+
+    <div class="container">
+        <h1>Budget</h1>
+
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="label">Total Budget</div>
+                <div class="value">Rs. {{ "%.2f"|format(total_budget) }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="label">Spent</div>
+                <div class="value">Rs. {{ "%.2f"|format(total_spent) }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="label">Remaining</div>
+                <div class="value">Rs. {{ "%.2f"|format(remaining) }}</div>
+            </div>
+        </div>
+
+        <table>
+            <tr>
+                <th>Category</th>
+                <th>Used</th>
+                <th>Budget</th>
+                <th>% Used</th>
+            </tr>
+            {% for category, used, budget_amount, percent in category_status %}
+            <tr>
+                <td>{{ category }}</td>
+                <td>Rs. {{ "%.2f"|format(used) }}</td>
+                <td>Rs. {{ "%.2f"|format(budget_amount) }}</td>
+                <td>
+                    {{ "%.1f"|format(percent) }}%
+                    {% if percent >= 100 %}
+                        🚨 Over budget!
+                    {% elif percent >= 90 %}
+                        ⚠️ Almost over budget!
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <h2>Set / Update Budget</h2>
+        <form method="POST">
+            <label>Total Budget:</label>
+            <input type="number" name="total" step="0.01" value="{{ budgets.get('total', '') }}" required>
+
+            <label>Food Budget:</label>
+            <input type="number" name="food" step="0.01" value="{{ budgets.get('food', '') }}" required>
+
+            <label>Transport Budget:</label>
+            <input type="number" name="transport" step="0.01" value="{{ budgets.get('transport', '') }}" required>
+
+            <label>Bills Budget:</label>
+            <input type="number" name="bills" step="0.01" value="{{ budgets.get('bills', '') }}" required>
+
+            <label>Other Budget:</label>
+            <input type="number" name="other" step="0.01" value="{{ budgets.get('other', '') }}" required>
+
+            <button type="submit">Save Budget</button>
+        </form>
+
+        <a href="/">Back to all expenses</a>
+    </div>
+</body>
+</html>

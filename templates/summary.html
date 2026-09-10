@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Monthly Summary</title>
+</head>
+<body>
+    {% include "navbar.html" %}
+
+    <div class="container">
+        <h1>Monthly Summary</h1>
+
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="label">Total Spent</div>
+                <div class="value">Rs. {{ "%.2f"|format(grand_total) }}</div>
+            </div>
+        </div>
+
+        <table>
+            <tr>
+                <th>Category</th>
+                <th>Total</th>
+            </tr>
+            {% for category, total in results %}
+            <tr>
+                <td>{{ category }}</td>
+                <td>Rs. {{ "%.2f"|format(total) }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <a href="/">Back to all expenses</a>
+    </div>
+</body>
+
+</html>
