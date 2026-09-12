@@ -67,10 +67,40 @@ def home():
     count_result = cursor.fetchone()
     total_count = count_result[0]
 
+    cursor.execute("SELECT amount FROM budget WHERE category = 'total'")
+    budget_result = cursor.fetchone()
+    total_budget = budget_result[0] if budget_result else 0
+    remaining_budget = total_budget - total_spent
+
+    cursor.execute("SELECT category, SUM(amount) as total FROM expenses GROUP BY category ORDER BY total DESC LIMIT 1")
+    top_category_result = cursor.fetchone()
+    highest_category = top_category_result[0] if top_category_result else "N/A"
+
+    cursor.execute("SELECT category, SUM(amount) FROM expenses GROUP BY category")
+    chart_data = cursor.fetchall()
+    chart_labels = [row[0] for row in chart_data]
+    chart_values = [row[1] for row in chart_data]
+    if total_spent > 0 and highest_category != "N/A":
+        cursor.execute("SELECT SUM(amount) FROM expenses WHERE category = ?", (highest_category,))
+        top_amount = cursor.fetchone()[0]
+        top_percent = round((top_amount / total_spent) * 100, 1)
+        insight_text = f"{highest_category.title()} accounts for {top_percent}% of your current spending."
+    else:
+        insight_text = "Add some expenses to see personalized insights!"
+    category_icons = {
+        "food": "\U0001F354", "grocery": "\U0001F6D2", "groceries": "\U0001F6D2",
+        "transport": "\U0001F697", "travel": "\u2708", "shopping": "\U0001F6CD",
+        "bills": "\U0001F4A1", "rent": "\U0001F3E0", "health": "\U0001F48A",
+         "entertainment": "\U0001F3AC", "education": "\U0001F4DA"
+}
+    
+    recent_transactions = []
+    for exp in expenses[-5:][::-1]:
+        icon = category_icons.get(exp[2], "💰")
+        recent_transactions.append({"id": exp[0], "amount": exp[1], "category": exp[2], "date": exp[3], "description": exp[4], "icon": icon})
     connection.close()
 
-    return render_template("index.html", expenses=expenses, total_spent=total_spent, total_count=total_count)
-
+    return render_template("index.html", expenses=expenses, total_spent=total_spent, total_count=total_count, remaining_budget=remaining_budget, highest_category=highest_category, chart_labels=chart_labels, chart_values=chart_values , recent_transactions=recent_transactions , insight_text=insight_text)
 @app.route("/add", methods=["GET", "POST"])
 def add():
     if request.method == "POST":

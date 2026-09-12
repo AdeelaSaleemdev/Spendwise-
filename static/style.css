@@ -1,6 +1,7 @@
 :root {
-    --primary: #6c5ce7;
-    --primary-dark: #5849c2;
+    
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
     --bg: #f5f6fa;
     --card-bg: #ffffff;
     --text: #2d3436;
@@ -21,6 +22,13 @@ body {
     margin: 0;
     padding: 0;
 }
+.home-page {
+    background-image: linear-gradient(rgba(96, 145, 245, 0.45), rgba(70, 120, 230, 0.45)), url('/static/images/home-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
 
 .container {
     max-width: 1000px;
@@ -34,7 +42,7 @@ h1, h2 {
 }
 
 nav {
-    background-color: var(--card-bg);
+    background-color: var(--bg);
     padding: 18px 30px;
     margin-bottom: 30px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.06);
@@ -47,11 +55,30 @@ nav a {
     text-decoration: none;
     font-weight: 500;
     font-size: 15px;
-    transition: color 0.2s ease;
+    padding: 8px 16px;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    transition: color 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
 }
 
 nav a:hover {
-    color: var(--primary);
+    color: white;
+    background-color: var(--primary);
+    transform: translateY(-3px);
+}
+.nav-brand {
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    color: var(--primary) !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+
+.nav-brand:hover {
+    background-color: transparent !important;
+    color: var(--primary-dark) !important;
+    transform: none !important;
 }
 
 .hero {
