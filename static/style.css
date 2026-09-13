@@ -23,8 +23,57 @@ body {
     padding: 0;
 }
 .home-page {
-    background-image: linear-gradient(rgba(96, 145, 245, 0.45), rgba(70, 120, 230, 0.45)), url('/static/images/home-bg.jpg');
+    background-image: url('/static/images/home-bg.jpg');
     background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+.add-page {
+background-image: url('/static/images/add-bg.jpg');    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.budget-page {
+    background-image: url('/static/images/budget-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.summary-page {
+    background-image: url('/static/images/summary-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.dashboard-page {
+background-image: url('/static/images/dashboard-bg.jpg');    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+.dashboard-page h1,
+.dashboard-page h2,
+.dashboard-page p,
+.dashboard-page li {
+    color: white;
+}
+
+.edit-page {
+background-image: url('/static/images/edit-bg.jpg');    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.filter-page {
+background-image: url('/static/images/filter-bg.jpg');    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.ai-page {
+background-image: url('/static/images/ai-bg.jpg');    background-size: cover;
     background-position: center;
     background-attachment: fixed;
 }
@@ -42,7 +91,7 @@ h1, h2 {
 }
 
 nav {
-    background-color: var(--bg);
+    background-color: #0f172a;
     padding: 18px 30px;
     margin-bottom: 30px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.06);
