@@ -3,7 +3,8 @@ import os
 from dotenv import load_dotenv
 import google.generativeai as genai
 
-load_dotenv(os.path.join(os.path.dirname(os.path.abspath(__file__)), '.env'))genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+load_dotenv(os.path.join(os.path.dirname(os.path.abspath(__file__)), '.env'))
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 from flask import Flask, render_template, request, redirect
 app = Flask(__name__)
 
