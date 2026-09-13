@@ -34,7 +34,7 @@ def ai_insights():
         for category, amount in budget_rows:
             budget_text += f"{category}: Rs. {amount}\n"
 
-        prompt = f"""You are a helpful personal finance assistant. Here is the user's expense data:
+        prompt = f"""You are a friendly personal finance buddy chatting with the user, not a formal report generator. Here is the user's expense data:
 
 {expense_text}
 
@@ -44,8 +44,7 @@ Here is the user's budget:
 
 The user's question is: {question}
 
-Give a short, clear, friendly answer based only on the data above."""
-
+Reply like you're texting a friend: warm, casual, and easy to understand. Use simple everyday words, short sentences, and at most 1-2 emojis if it feels natural. Do NOT use bullet points, bold headings, or a list format — just write it as normal flowing conversation, 2-4 sentences long, based only on the data above."""
         model = genai.GenerativeModel("gemini-3.6-flash")
         response = model.generate_content(prompt)
         answer = response.text
@@ -104,11 +103,21 @@ def home():
 @app.route("/add", methods=["GET", "POST"])
 def add():
     if request.method == "POST":
-        amount = request.form["amount"]
-        category = request.form["category"].strip().lower()
-        date = request.form["date"]
-        description = request.form["description"]
+        amount_str = request.form.get("amount", "").strip()
+        category = request.form.get("category", "").strip().lower()
+        date = request.form.get("date", "").strip()
+        description = request.form.get("description", "").strip()
 
+        if not amount_str or not category or not date:
+            return "Amount, category, and date are required", 400
+
+        try:
+            amount = float(amount_str)
+        except ValueError:
+            return "Invalid amount — please enter a valid number", 400
+
+        if amount <= 0:
+            return "Amount must be greater than zero", 400
         connection = sqlite3.connect("spendwise.db")
         cursor = connection.cursor()
         cursor.execute(
@@ -122,7 +131,7 @@ def add():
 
     return render_template("add.html")
    
-@app.route("/delete/<int:expense_id>")    
+@app.route("/delete/<int:expense_id>", methods=["POST"])
 def delete(expense_id):
     connection = sqlite3.connect("spendwise.db")
     cursor = connection.cursor()
@@ -138,10 +147,24 @@ def edit(expense_id):
     cursor = connection.cursor()
 
     if request.method == "POST":
-        amount = request.form["amount"]
-        category = request.form["category"].strip().lower()
-        date = request.form["date"]
-        description = request.form["description"]
+        amount_str = request.form.get("amount", "").strip()
+        category = request.form.get("category", "").strip().lower()
+        date = request.form.get("date", "").strip()
+        description = request.form.get("description", "").strip()
+
+        if not amount_str or not category or not date:
+            connection.close()
+            return "Amount, category, and date are required", 400
+
+        try:
+            amount = float(amount_str)
+        except ValueError:
+            connection.close()
+            return "Invalid amount — please enter a valid number", 400
+
+        if amount <= 0:
+            connection.close()
+            return "Amount must be greater than zero", 400
 
         cursor.execute(
             "UPDATE expenses SET amount = ?, category = ?, date = ?, description = ? WHERE id = ?",
@@ -176,18 +199,34 @@ def budget():
     cursor = connection.cursor()
 
     if request.method == "POST":
-        total_budget = request.form["total"]
-        food_budget = request.form["food"]
-        transport_budget = request.form["transport"]
-        bills_budget = request.form["bills"]
-        other_budget = request.form["other"]
+        raw_values = {
+            "total": request.form.get("total", "").strip(),
+            "food": request.form.get("food", "").strip(),
+            "transport": request.form.get("transport", "").strip(),
+            "bills": request.form.get("bills", "").strip(),
+            "other": request.form.get("other", "").strip(),
+        }
+
+        converted = {}
+        for key, value in raw_values.items():
+            if not value:
+                connection.close()
+                return f"{key} budget is required", 400
+            try:
+                converted[key] = float(value)
+            except ValueError:
+                connection.close()
+                return f"Invalid {key} budget — please enter a valid number", 400
+            if converted[key] < 0:
+                connection.close()
+                return f"{key} budget cannot be negative", 400
 
         budget_data = [
-            ("total", total_budget),
-            ("food", food_budget),
-            ("transport", transport_budget),
-            ("bills", bills_budget),
-            ("other", other_budget)
+            ("total", converted["total"]),
+            ("food", converted["food"]),
+            ("transport", converted["transport"]),
+            ("bills", converted["bills"]),
+            ("other", converted["other"])
         ]
 
         cursor.executemany(
@@ -195,7 +234,6 @@ def budget():
             budget_data
         )
         connection.commit()
-
     cursor.execute("SELECT category, amount FROM budget")
     budget_rows = cursor.fetchall()
     budgets = {}
@@ -251,8 +289,13 @@ def filter_expenses():
         params.append(month + "%")
 
     if min_amount:
-        query += " AND amount > ?"
-        params.append(float(min_amount))
+        try:
+            min_amount_value = float(min_amount)
+            query += " AND amount > ?"
+            params.append(min_amount_value)
+        except ValueError:
+            connection.close()
+            return "Invalid amount in filter — please enter a valid number", 400
 
     cursor.execute(query, params)
     results = cursor.fetchall()
@@ -775,5 +818,5 @@ def main():
 
 create_table()
 
-if __name__ == "__main__":
-    app.run(debug=True)
+if __name__ == '__main__':
+    app.run(debug=False)
