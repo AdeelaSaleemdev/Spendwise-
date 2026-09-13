@@ -46,7 +46,7 @@ The user's question is: {question}
 
 Give a short, clear, friendly answer based only on the data above."""
 
-        model = genai.GenerativeModel("gemini-2.5-flash")
+        model = genai.GenerativeModel("gemini-3.6-flash")
         response = model.generate_content(prompt)
         answer = response.text
 
