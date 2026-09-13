@@ -57,7 +57,22 @@ background-image: url('/static/images/dashboard-bg.jpg');    background-size: co
 .dashboard-page h2,
 .dashboard-page p,
 .dashboard-page li {
-    color: white;
+    color: white !important;
+}
+.home-page h2,
+.budget-page h1,
+.budget-page h2,
+.summary-page h1,
+.summary-page h2,
+.add-page h1,
+.add-page h2,
+.edit-page h1,
+.edit-page h2,
+.filter-page h1,
+.filter-page h2,
+.ai-page h1,
+.ai-page h2 {
+    color: white !important;
 }
 
 .edit-page {
